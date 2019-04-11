@@ -196,6 +196,11 @@ PrefabInstance:
       propertyPath: cannon
       value: 
       objectReference: {fileID: 1169577426}
+    - target: {fileID: 8243463664370415339, guid: eb2ae10c8f71be648bc581d693c46714,
+        type: 3}
+      propertyPath: testgun
+      value: 
+      objectReference: {fileID: 1169577430}
     - target: {fileID: 2595606861980025327, guid: eb2ae10c8f71be648bc581d693c46714,
         type: 3}
       propertyPath: m_GravityScale
@@ -481,7 +486,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1024342361}
   m_LocalRotation: {x: -0, y: -0, z: 0.99996406, w: 0.0084772445}
-  m_LocalPosition: {x: -0.293, y: 0.565, z: 0}
+  m_LocalPosition: {x: -0.3, y: 0.04, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1052599276498775055}
@@ -494,6 +499,20 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1052599276498775054}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1169577430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1169577426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59cff8dc49fd3ee4aa4f21e04c3346bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mousePos: {x: 0, y: 0, z: 0}
+  cannon: {fileID: 1052599277388358679, guid: 01d7acd4eee12724fb05b09203bcc15e, type: 3}
 --- !u!1001 &1052599276498775054
 PrefabInstance:
   m_ObjectHideFlags: 0
