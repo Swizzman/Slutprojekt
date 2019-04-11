@@ -15,11 +15,11 @@ public class PhasmaGun : Gun
     {
         
     }
-    public override void shooting()
+    public override void Shooting()
     {
         throw new System.NotImplementedException();
     }
-    public override void rotating()
+    public override void Rotating()
     {
         throw new System.NotImplementedException();
     }

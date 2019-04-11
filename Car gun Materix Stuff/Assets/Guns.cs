@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class Gun : MonoBehaviour
 {
-    public abstract  void shooting();
+    public abstract  void Shooting();
 
-    public abstract void rotating();
+    public abstract void Rotating();
 }

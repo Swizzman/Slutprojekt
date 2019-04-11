@@ -36,11 +36,13 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetMouseButtonDown(0))
+        {
+            testgun.Shooting();
+        }
+            
+        testgun.Rotating();
 
-        testgun.shooting();
-
-
-        //GameObject theParent = Testgun.gameObject.transform.parent;
         //mousePos.z = 10;
         
         
@@ -51,21 +53,7 @@ public class PlayerController : MonoBehaviour
 
         //print(angle);
 
-        if (testgun.cannon.transform.parent.transform.rotation.z < -90)
-        {
-            //cannon.transform.parent.eulerAngles = new Vector3(0, 0, -90);
-            testgun.cannon.transform.parent.eulerAngles = new Vector3(0, 0, angle);
-        }
-        else if (testgun.cannon.transform.parent.transform.rotation.z > 0)
-        {
-            //cannon.transform.parent.eulerAngles = new Vector3(0, 0, 0);
-            testgun.cannon.transform.parent.eulerAngles = new Vector3(0, 0, angle);
-        }
-        else
-        {
-            testgun.cannon.transform.parent.eulerAngles = new Vector3(0, 0, angle);
-
-        }
+       
 
         //print(cannon.transform.parent.rotation.z);
 
