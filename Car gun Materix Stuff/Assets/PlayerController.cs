@@ -36,14 +36,14 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Denna if-sats skjuter iväg spelaren ifall musen trycks ned
         if (Input.GetMouseButtonDown(0))
         {
             testgun.Shooting();
         }
-            
+        //Denna metod kallas hela tiden för att 
         testgun.Rotating();
 
-        //mousePos.z = 10;
         
         
 
