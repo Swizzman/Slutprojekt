@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Hämtar RigidBody2D från spelarobjektet
+        //Hämtar RigidBody2D från spelarobjektet.... Av någon anledning
         rb = GetComponent<Rigidbody2D>();
 
     }
@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
         {
             testgun.Shooting();
         }
-        //Denna metod kallas hela tiden för att 
+        //Denna metod kallas hela tiden för att rotera kannonen
         testgun.Rotating();
 
         
