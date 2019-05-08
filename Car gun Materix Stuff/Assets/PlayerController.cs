@@ -8,7 +8,6 @@ public class PlayerController : MonoBehaviour
     public GameObject player;
     public GameObject testSpawn;
     //Instansierar kanonen
-
     [SerializeField]
     Gun testgun;
 
@@ -43,19 +42,6 @@ public class PlayerController : MonoBehaviour
         }
         //Denna metod kallas hela tiden för att rotera kannonen
         testgun.Rotating();
-
-        
-        
-
-
-
-        
-
-        //print(angle);
-
-       
-
-        //print(cannon.transform.parent.rotation.z);
 
     }
 }
