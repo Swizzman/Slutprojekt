@@ -60,10 +60,10 @@ public class PlayerController : Characters
 
     }
     //Denna metod ska kallas om spelaren ska ta skada
-   /* public override void Hurt(int damage)
+    public override void Hurt(int damage)
     {
         //Subtraherar skadan från hälsan
         hp = hp - damage;
-
-    }*/
+        hpText.text = hp + " HP";
+    }
 }
