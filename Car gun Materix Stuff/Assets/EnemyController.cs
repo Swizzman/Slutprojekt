@@ -2,33 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyControlle : MonoBehaviour
+public class EnemyController : MonoBehaviour
 {
-    GameObject attacker;
-    int speed = 10;
+    public GameObject canonEnemy;
+    List<GameObject> Enemies = new List<GameObject>();
     // Start is called before the first frame update
     void Start()
     {
-        
+        Enemies.Add(Instantiate(canonEnemy));
     }
 
     // Update is called once per frame
     void Update()
     {
         
-    }
-
-    void Attack(GameObject target)
-    {
-
-    }
-
-    void Retreat()
-    {
-
-    }
-    void Shoot(GameObject target)
-    {
-
     }
 }

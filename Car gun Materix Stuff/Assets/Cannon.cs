@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Cannon : Gun
 {
@@ -39,7 +40,6 @@ public class Cannon : Gun
         //Hämtar muspositionen igen
         //Konverterar kanonens lokala position till den globala positionen för världen
         Vector3 cannonPos = transform.TransformPoint(cannon.transform.position);
-        print(cannonPos);
         //Av någon jävla anledning behövs Atan2 för att räkna ut rätt grader. Den tar i beaktning om graderna råkar skapa division med 0
         Vector3 offset = mousePos - cannonPos;
         angle = Mathf.Atan2(offset.y, offset.x) * Mathf.Rad2Deg;
