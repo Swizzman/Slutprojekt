@@ -17,6 +17,7 @@ public class Canoneer : Characters
     private int hp = 100;
     Vector3 currentPlayerPosition;
     Action currentAction;
+    private bool shouldShoot;
 
     // Start is called before the first frame update
     void Start()
@@ -42,7 +43,7 @@ public class Canoneer : Characters
         {
             Moving(retreatObject.transform.position);
         }
-
+        print(hp);
 
 
     }
@@ -56,24 +57,22 @@ public class Canoneer : Characters
             //currentAction = Objectives.Dequeue();
             //print(Objectives.Peek().ToString());
         }
-        if (Random.Range(0, 3) == 1)
+        if (shouldShoot)
         {
-            Objectives.Enqueue(Approach);
+            Objectives.Enqueue(Shoot);
+            shouldShoot = false;
 
-        }
-        else if (Random.Range(0, 3) == 2)
-        {
-            Objectives.Enqueue(Retreat);
         }
         else
         {
             Objectives.Enqueue(Approach);
+            shouldShoot = true;
         }
         Action nextAction = Objectives.Dequeue();
 
         print("3 second wait done");
 
-        if (nextAction == Approach && currentAction != Shoot)
+        if (nextAction == Approach)
         {
 
             currentAction = Approach;
@@ -82,16 +81,15 @@ public class Canoneer : Characters
             Objectives.Enqueue(Shoot);
 
         }
-        else if (nextAction == Retreat)
-        {
-            currentAction = Retreat;
-            nextAction(retreatObject);
-        }
         else if (nextAction == Shoot)
         {
             currentAction = Shoot;
             nextAction(player);
 
+        }
+        else
+        {
+            nextAction(retreatObject);
         }
         leaveState = true;
         yield break;
@@ -111,6 +109,7 @@ public class Canoneer : Characters
     //Denna metod skadar spelaren
     protected override void Shoot(GameObject target)
     {
+        Hurt(70);
         if (target.tag == "Player")
         {
             //Genom att hämta sin egna komponent kan jag skada spelaren
@@ -131,5 +130,11 @@ public class Canoneer : Characters
         transform.position = Vector3.Lerp(transform.position, Position, 2 * Time.deltaTime);
 
 
+    }
+    public override void Hurt(int damage)
+    {
+        hp = hp - damage;
+        //När fienden tar skada kommer den omedelbart försöka fly
+        Objectives.Enqueue(Retreat);
     }
 }

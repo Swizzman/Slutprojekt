@@ -12,9 +12,13 @@ public class PlayerController : Characters
     //Instansierar kanonen
     [SerializeField]
     Gun testgun;
-    int ammo = 10;
+    
+    [SerializeField]
+    Slider ammoSlider;
+    int ammo = 1;
     int hp = 100;
-
+    bool sliderShouldfill = false;
+    float sliderValue;
     public Gun Testgun
     {
         get
@@ -31,10 +35,15 @@ public class PlayerController : Characters
     // Start is called before the first frame update
     void Start()
     {
+        sliderValue = 0f;
         //Hämtar RigidBody2D från spelarobjektet.... Av någon anledning
         rb = GetComponent<Rigidbody2D>();
         ammoText.text = "Ammo: "  + ammo;
         hpText.text = hp + " HP";
+        if (hp <= 10)
+        {
+            hpText.color = Color.red;
+        }
 
     }
 
@@ -42,12 +51,31 @@ public class PlayerController : Characters
     void Update()
     {
         //Denna if-sats skjuter iväg spelaren ifall musen trycks ned
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && ammo > 0)
         {
             testgun.Shooting();
             //Ändrar ammo-räknaren
             ammo--;
             ammoText.text = "Ammo: " + ammo;
+            if (ammo < 10)
+            {
+                ammoText.color = Color.red;
+                if (ammo <= 0)
+                {
+                    StartCoroutine(AmmoRecharger());
+                    sliderShouldfill = true;
+                   
+
+                }
+                
+
+            }
+
+        }
+        if (sliderShouldfill)
+        {
+            ammoSlider.value = sliderValue;
+            sliderValue += 0.05f;
 
         }
         //Denna metod kallas hela tiden för att rotera kannonen
@@ -56,6 +84,12 @@ public class PlayerController : Characters
         if (hp <= 0)
         {
             Destroy (this.gameObject);
+        }
+        if (ammoSlider.value == 1)
+        {
+            ammoSlider.value = 0;
+            sliderShouldfill = false;
+            sliderValue = 0;
         }
 
     }
@@ -66,4 +100,13 @@ public class PlayerController : Characters
         hp = hp - damage;
         hpText.text = hp + " HP";
     }
+    //Denna kod ska recharga skotten
+    IEnumerator AmmoRecharger()
+    {
+        yield return new WaitForSeconds(0.5f);
+        ammo = 1;
+        
+        yield break;
+    }
+
 }
