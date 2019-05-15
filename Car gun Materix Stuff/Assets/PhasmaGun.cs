@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PhasmaGun : Gun
 {
+    //Denna klass ska innehålla funktionaliteten för ett annat vapen som puttar spelaren konstant så länge musknappen är intryckt. Inte färdigt än
     // Start is called before the first frame update
     void Start()
     {

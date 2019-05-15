@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+
+
 public class Canoneer : Characters
 {
     //En delegate är ett sätt att lagra metoder som variabler utefter en mall. I detta fall ska metoder som ska kunna lagras i 'Action' ha en parameter som är ett GameObject
@@ -18,6 +20,7 @@ public class Canoneer : Characters
     Vector3 currentPlayerPosition;
     Action currentAction;
     private bool shouldShoot;
+    private bool shouldRetreat;
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +45,7 @@ public class Canoneer : Characters
         else if (currentAction == Retreat)
         {
             Moving(retreatObject.transform.position);
+            shouldRetreat = false;
         }
         print(hp);
 
@@ -52,11 +56,7 @@ public class Canoneer : Characters
     {
         //Denna sak väntar 3 sekunder och kör sedan saker under kodraden
         yield return new WaitForSeconds(3);
-        if (currentAction == null)
-        {
-            //currentAction = Objectives.Dequeue();
-            //print(Objectives.Peek().ToString());
-        }
+
         if (shouldShoot)
         {
             Objectives.Enqueue(Shoot);
@@ -90,6 +90,7 @@ public class Canoneer : Characters
         else
         {
             nextAction(retreatObject);
+            shouldRetreat = true;
         }
         leaveState = true;
         yield break;
@@ -103,13 +104,13 @@ public class Canoneer : Characters
     protected override void Approach(GameObject target)
     {
 
-        this.transform.position = Vector3.Lerp(transform.position, target.transform.position, 5f);
+        this.transform.position = Vector3.Lerp(transform.position, target.transform.position, 5f * Time.deltaTime);
 
     }
     //Denna metod skadar spelaren
     protected override void Shoot(GameObject target)
     {
-        Hurt(70);
+        //Hurt(70);
         if (target.tag == "Player")
         {
             //Genom att hämta sin egna komponent kan jag skada spelaren
@@ -121,13 +122,13 @@ public class Canoneer : Characters
     protected override void Retreat(GameObject objectPosition)
     {
 
-        this.transform.position = Vector3.Lerp(transform.position, objectPosition.transform.position, 5f);
+        this.transform.position = Vector3.Lerp(transform.position, objectPosition.transform.position, 5f * Time.deltaTime);
 
     }
     private void Moving(Vector3 Position)
     {
 
-        transform.position = Vector3.Lerp(transform.position, Position, 2 * Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position, Position, 1f * Time.deltaTime);
 
 
     }
@@ -137,4 +138,5 @@ public class Canoneer : Characters
         //När fienden tar skada kommer den omedelbart försöka fly
         Objectives.Enqueue(Retreat);
     }
+
 }
