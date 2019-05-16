@@ -7,20 +7,20 @@ using UnityEngine;
 
 public class Canoneer : Characters
 {
-    //En delegate är ett sätt att lagra metoder som variabler utefter en mall. I detta fall ska metoder som ska kunna lagras i 'Action' ha en parameter som är ett GameObject
+    //En delegate är ett sätt att lagra metoder som variabler utefter en mall. I detta fall ska metoder som ska kunna lagras i 'Action' ha en parameter som är ett GameObject.
     delegate void Action(GameObject g);
     private bool leaveState = true;
+    private bool shouldShoot;
+    private bool shouldRetreat;
     [SerializeField]
     GameObject player;
     [SerializeField]
     GameObject retreatObject;
     Queue<Action> Objectives = new Queue<Action>();
-    Queue<string> ObjectiveNames = new Queue<string>();
     private int hp = 100;
     Vector3 currentPlayerPosition;
     Action currentAction;
-    private bool shouldShoot;
-    private bool shouldRetreat;
+
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +31,7 @@ public class Canoneer : Characters
     // Update is called once per frame
     void Update()
     {
+        //Denna if-sats startas ifall leavestate är sann vilket gör så att Coroutinenen inte körs hela tiden.
         if (leaveState)
         {
             StartCoroutine(WaitTriggerAction());
@@ -38,6 +39,7 @@ public class Canoneer : Characters
 
         }
 
+        //Dessa if-satser kallas och kallar på Moving men ändrar vad som skickas beroende på vad CurrentAction är
         if (currentAction == Approach)
         {
             Moving(currentPlayerPosition);
@@ -47,7 +49,8 @@ public class Canoneer : Characters
             Moving(retreatObject.transform.position);
             shouldRetreat = false;
         }
-        print(hp);
+
+        //print(hp);
 
 
     }
@@ -56,7 +59,7 @@ public class Canoneer : Characters
     {
         //Denna sak väntar 3 sekunder och kör sedan saker under kodraden
         yield return new WaitForSeconds(3);
-
+        
         if (shouldShoot)
         {
             Objectives.Enqueue(Shoot);
@@ -68,37 +71,48 @@ public class Canoneer : Characters
             Objectives.Enqueue(Approach);
             shouldShoot = true;
         }
+        
         Action nextAction = Objectives.Dequeue();
-
-        print("3 second wait done");
-
-        if (nextAction == Approach)
+        try
         {
+            print("3 second wait done");
 
-            currentAction = Approach;
-            nextAction(player);
-            currentPlayerPosition = player.transform.position;
-            Objectives.Enqueue(Shoot);
+            if (nextAction == Approach)
+            {
 
+                currentAction = Approach;
+                nextAction(player);
+                currentPlayerPosition = player.transform.position;
+                Objectives.Enqueue(Shoot);
+
+            }
+            else if (nextAction == Shoot)
+            {
+                currentAction = Shoot;
+                nextAction(player);
+
+            }
+            else
+            {
+                nextAction(retreatObject);
+                shouldRetreat = true;
+            }
         }
-        else if (nextAction == Shoot)
+        catch
         {
-            currentAction = Shoot;
-            nextAction(player);
+            
+            throw new System.Exception("Something went wrong");
+        }
+       
 
-        }
-        else
-        {
-            nextAction(retreatObject);
-            shouldRetreat = true;
-        }
+       
         leaveState = true;
         yield break;
 
 
 
     }
-    //Temporär kod
+
 
     //Denna metod ska få fienden att röra sig mot spelaren (Det funkar egentligen med vilka mål som helst så kan återanvända den)
     protected override void Approach(GameObject target)
@@ -118,6 +132,7 @@ public class Canoneer : Characters
         }
     }
     //Denna metod ska få fienden att retirera till en specifik punkt
+    //Metoderna "Approach" och "Retreat" är i nuläget inte aktiva utan "Moving" används istället. Har kvar de gamla ifall jag vill använda de samt kunna visa att jag förstår delegates.
 
     protected override void Retreat(GameObject objectPosition)
     {
@@ -125,6 +140,7 @@ public class Canoneer : Characters
         this.transform.position = Vector3.Lerp(transform.position, objectPosition.transform.position, 5f * Time.deltaTime);
 
     }
+    //Denna metod ska användas 
     private void Moving(Vector3 Position)
     {
 

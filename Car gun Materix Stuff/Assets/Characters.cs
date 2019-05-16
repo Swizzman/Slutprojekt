@@ -16,7 +16,7 @@ public abstract class Characters : MonoBehaviour
     {
         
     }
-
+    //Massa virtuella metoder som kan användas av sub-klasser
     protected virtual void Approach(GameObject target)
     {
 

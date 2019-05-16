@@ -9,19 +9,26 @@ public class PlayerController : Characters
     
     public GameObject player;
     public GameObject testSpawn;
-    //Instansierar kanonen
+
     [SerializeField]
     Gun testgun;
 
     [SerializeField]
     Slider ammoSlider;
     [SerializeField]
-    LoadSceneMode test;
-    
+    Image hpImage;
+
+    //De olika stadierna av hjärtbilderna Serializas här
+    [SerializeField]
+    Sprite heartStage2;
+    [SerializeField]
+    Sprite heartStage3;
+
     int ammo = 1;
     int hp = 100;
     bool sliderShouldfill = false;
     float sliderValue;
+    //Instansierar kanonen
     public Gun Testgun
     {
         get
@@ -31,21 +38,17 @@ public class PlayerController : Characters
         private set { testgun = value; }
     }
 
-    Vector2 finalPos;
-
     Rigidbody2D rb;
 
     // Start is called before the first frame update
     void Start()
     {
+        //Använder denna kallelse för testsyfte
+        Hurt(70);
         sliderValue = 0f;
         //Hämtar RigidBody2D från spelarobjektet.... Av någon anledning
         rb = GetComponent<Rigidbody2D>();
 
-        if (hp <= 10)
-        {
-            hpText.color = Color.red;
-        }
 
     }
 
@@ -78,7 +81,7 @@ public class PlayerController : Characters
         //Förstör spelaren om hälsopoängen blir 0 eller mindre
         if (hp <= 0)
         {
-            ChangeLevel();
+            ChangeLevel(1);
             Destroy(this.gameObject);
         }
         if (ammoSlider.value == 1)
@@ -94,6 +97,18 @@ public class PlayerController : Characters
     {
         //Subtraherar skadan från hälsan
         hp = hp - damage;
+        if (hp <= 80)
+        {
+            hpImage.sprite = heartStage2;
+        }
+        else if (hp <= 30)
+        {
+            hpImage.sprite = heartStage3;
+        }
+        else if (hp <= 0)
+        {
+            hpImage.sprite = null;
+        }
     }
     //Denna kod ska recharga skotten
     //Yield gör att koden kan komma ihåg vart någonstans i metoden den var. Om man exempelvis kallar på en IEnumerator med en foreach-loop kan den returnera olika saker med samma metod
@@ -112,10 +127,7 @@ public class PlayerController : Characters
         yield return 5;
      }
      Detta kommer nu returnera olika saker varje gång. Så först returneras 1 och sedan 2 och sedan 3 o.s.v.
-         
-         
-         
-         */
+     */
     IEnumerator AmmoRecharger()
     {
         yield return new WaitForSeconds(0.5f);
@@ -123,9 +135,19 @@ public class PlayerController : Characters
 
         yield break;
     }
-    void ChangeLevel()
+    //Denna metod ska byta mellan olika nivåer. I en optimal värld bör denna metod vara någon annanstans och kunna kallas av olika delar av spelet. Den bör då vara public 
+    void ChangeLevel(int levelIndex)
     {
-         SceneManager.LoadScene(1);
+        try
+        {
+            SceneManager.LoadScene(levelIndex);
+
+        }
+        catch (System.IndexOutOfRangeException)
+        {
+
+            throw new System.Exception("That level doesn't exist");
+        }
     }
 
 }
