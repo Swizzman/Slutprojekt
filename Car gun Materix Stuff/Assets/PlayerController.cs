@@ -37,17 +37,13 @@ public class PlayerController : Characters
         }
         private set { testgun = value; }
     }
-
-    Rigidbody2D rb;
-
     // Start is called before the first frame update
     void Start()
     {
         //Använder denna kallelse för testsyfte
         Hurt(70);
         sliderValue = 0f;
-        //Hämtar RigidBody2D från spelarobjektet.... Av någon anledning
-        rb = GetComponent<Rigidbody2D>();
+
 
 
     }
