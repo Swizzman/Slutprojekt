@@ -18,8 +18,8 @@ public class Canoneer : Characters
     GameObject retreatObject;
     Queue<Action> Objectives = new Queue<Action>();
     private int hp = 100;
-    Vector3 currentPlayerPosition;
-    Action currentAction;
+    private Vector3 currentPlayerPosition;
+    private Action currentAction;
 
 
     // Start is called before the first frame update
@@ -31,24 +31,28 @@ public class Canoneer : Characters
     // Update is called once per frame
     void Update()
     {
-        //Denna if-sats startas ifall leavestate är sann vilket gör så att Coroutinenen inte körs hela tiden.
-        if (leaveState)
-        {
-            StartCoroutine(WaitTriggerAction());
-            leaveState = false;
+       // while (hp > 0 )
+        //{
+            //Denna if-sats startas ifall leavestate är sann vilket gör så att Coroutinenen inte körs hela tiden.
+            if (leaveState)
+            {
+                StartCoroutine(WaitTriggerAction());
+                leaveState = false;
 
-        }
+            }
 
-        //Dessa if-satser kallas och kallar på Moving men ändrar vad som skickas beroende på vad CurrentAction är
-        if (currentAction == Approach)
-        {
-            Moving(currentPlayerPosition);
-        }
-        else if (currentAction == Retreat)
-        {
-            Moving(retreatObject.transform.position);
-            shouldRetreat = false;
-        }
+            //Dessa if-satser kallas och kallar på Moving men ändrar vad som skickas beroende på vad CurrentAction är
+            if (currentAction == Approach)
+            {
+                Moving(currentPlayerPosition);
+            }
+            else if (currentAction == Retreat)
+            {
+                Moving(retreatObject.transform.position);
+                shouldRetreat = false;
+            }
+        //}
+
 
         //print(hp);
 
@@ -59,7 +63,8 @@ public class Canoneer : Characters
     {
         //Denna sak väntar 3 sekunder och kör sedan saker under kodraden
         yield return new WaitForSeconds(3);
-        
+        // if (hp > 50)
+        //{
         if (shouldShoot)
         {
             Objectives.Enqueue(Shoot);
@@ -70,12 +75,26 @@ public class Canoneer : Characters
         {
             Objectives.Enqueue(Approach);
             shouldShoot = true;
+         }
+        /*}
+        else
+        {
+            Objectives.Clear();
+
+            while (hp < 50)
+            {
+                Heal(40);
+            }
+            shouldShoot = false;
         }
+        */
+
         
         Action nextAction = Objectives.Dequeue();
         try
         {
             print("3 second wait done");
+
 
             if (nextAction == Approach)
             {
@@ -124,7 +143,6 @@ public class Canoneer : Characters
     //Denna metod skadar spelaren
     protected override void Shoot(GameObject target)
     {
-        //Hurt(70);
         if (target.tag == "Player")
         {
             //Genom att hämta sin egna komponent kan jag skada spelaren
@@ -153,6 +171,10 @@ public class Canoneer : Characters
         hp = hp - damage;
         //När fienden tar skada kommer den omedelbart försöka fly
         Objectives.Enqueue(Retreat);
+    }
+    private void Heal(int amount)
+    {
+        hp = hp + amount;
     }
 
 }

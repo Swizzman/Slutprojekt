@@ -6,10 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : Characters
 {
-    
-    public GameObject player;
-    public GameObject testSpawn;
-
+    //Denna Serialiseringen skulle vara väldigt ologisk i ett färdigt spel. Då skulle istället det finnas en publik lista av fiender som kan hämtas(Jag har en sådan lista men använder den inte då den inte är riktigt byggd)
+    [SerializeField]
+    GameObject enemy;
     [SerializeField]
     Gun testgun;
 
@@ -24,10 +23,10 @@ public class PlayerController : Characters
     [SerializeField]
     Sprite heartStage3;
 
-    int ammo = 1;
-    int hp = 100;
-    bool sliderShouldfill = false;
-    float sliderValue;
+    private int ammo = 1;
+    private int hp = 100;
+    private bool sliderShouldfill = false;
+    private float sliderValue;
     //Instansierar kanonen
     public Gun Testgun
     {
@@ -41,7 +40,6 @@ public class PlayerController : Characters
     void Start()
     {
         //Använder denna kallelse för testsyfte
-        Hurt(70);
         sliderValue = 0f;
 
 
@@ -64,6 +62,7 @@ public class PlayerController : Characters
 
 
             }
+
 
         }
         if (sliderShouldfill)
@@ -144,6 +143,10 @@ public class PlayerController : Characters
 
             throw new System.Exception("That level doesn't exist");
         }
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+
     }
 
 }

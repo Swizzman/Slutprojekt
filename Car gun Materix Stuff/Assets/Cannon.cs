@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class Cannon : Gun
 {
-     Vector3 mousePos;
+    private Vector3 mousePos;
     [SerializeField]
      GameObject cannon;
-    float angle;
-    Transform theParent;
+    private float angle;
+    private Transform theParent;
     // Start is called before the first frame update
     void Start()
     {

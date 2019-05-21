@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    int DistanceAway = 10;
+    private int DistanceAway = 10;
 
-    public GameObject player;
-    Vector3 playerPosition;
+    [SerializeField]
+    GameObject player;
+    private Vector3 playerPosition;
     // Start is called before the first frame update
     void Start()
     {
