@@ -49,6 +49,7 @@ public class Canoneer : EnemyController
         }
         else if (currentAction == Retreat)
         {
+            print("Ultimate Retreat");
             Moving(retreatObject.transform.position);
             shouldRetreat = false;
         }
@@ -122,6 +123,8 @@ public class Canoneer : EnemyController
             }
             else
             {
+                currentAction = Retreat;
+                print("Retreating");
                 nextAction(retreatObject);
                 shouldRetreat = true;
             }
@@ -163,7 +166,7 @@ public class Canoneer : EnemyController
     protected override void Retreat(GameObject objectPosition)
     {
 
-        this.transform.position = Vector3.Lerp(transform.position, objectPosition.transform.position, 5f * Time.deltaTime);
+        this.transform.position = Vector3.Lerp(transform.position, objectPosition.transform.position, 1f * Time.deltaTime);
 
     }
     //Denna metod ska användas för att flytta fienden till en punkt. Det kan antingen vara spelaren eller reträttpunkten
@@ -188,6 +191,7 @@ public class Canoneer : EnemyController
 
         }
         //När fienden tar skada kommer den omedelbart försöka fly
+        Objectives.Enqueue(Retreat);
     }
     private void Heal(int amount)
     {
