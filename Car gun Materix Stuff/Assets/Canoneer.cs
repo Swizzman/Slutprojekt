@@ -5,7 +5,8 @@ using UnityEngine;
 
 
 
-public class Canoneer : Characters
+
+public class Canoneer : EnemyController
 {
     //En delegate är ett sätt att lagra metoder som variabler utefter en mall. I detta fall ska metoder som ska kunna lagras i 'Action' ha en parameter som är ett GameObject.
     delegate void Action(GameObject g);
@@ -25,37 +26,42 @@ public class Canoneer : Characters
     // Start is called before the first frame update
     void Start()
     {
-
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     // Update is called once per frame
     void Update()
     {
-       // while (hp > 0 )
-        //{
-            //Denna if-sats startas ifall leavestate är sann vilket gör så att Coroutinenen inte körs hela tiden.
-            if (leaveState)
+        //Denna loop skall köras hela tiden så länge som fienden har hp
+        print(hp);
+        //Denna if-sats startas ifall leavestate är sann vilket gör så att Coroutinenen inte körs hela tiden.
+        if (leaveState)
+        {
+            StartCoroutine(WaitTriggerAction());
+            leaveState = false;
+
+        }
+
+        //Dessa if-satser kallas och kallar på Moving men ändrar vad som skickas beroende på vad CurrentAction är
+        if (currentAction == Approach)
+        {
+            Moving(currentPlayerPosition);
+        }
+        else if (currentAction == Retreat)
+        {
+            Moving(retreatObject.transform.position);
+            shouldRetreat = false;
+        }
+
+        if (hp <= 0)
+        {
+            for (int i = 0; i < Objectives.Count; )
             {
-                StartCoroutine(WaitTriggerAction());
-                leaveState = false;
-
+                Objectives.Dequeue();
             }
+            Destroy(this);
 
-            //Dessa if-satser kallas och kallar på Moving men ändrar vad som skickas beroende på vad CurrentAction är
-            if (currentAction == Approach)
-            {
-                Moving(currentPlayerPosition);
-            }
-            else if (currentAction == Retreat)
-            {
-                Moving(retreatObject.transform.position);
-                shouldRetreat = false;
-            }
-        //}
-
-
-        //print(hp);
-
+        }
 
     }
     //Denna metod ska hantera delays och se till att saker händer
@@ -63,39 +69,42 @@ public class Canoneer : Characters
     {
         //Denna sak väntar 3 sekunder och kör sedan saker under kodraden
         yield return new WaitForSeconds(3);
-        // if (hp > 50)
-        //{
-        if (shouldShoot)
+        if (hp > 50)
         {
-            Objectives.Enqueue(Shoot);
-            shouldShoot = false;
+            if (shouldShoot)
+            {
+                Objectives.Enqueue(Shoot);
+                shouldShoot = false;
+
+            }
+            else
+            {
+                Objectives.Enqueue(Approach);
+                shouldShoot = true;
+            }
 
         }
         else
         {
-            Objectives.Enqueue(Approach);
-            shouldShoot = true;
-         }
-        /*}
-        else
-        {
+            //Denna for-loop ska agera som en en liten bomb som sprängs och skadar alla fiender. I nuläget finns det bara en fiende men hoppas du ser att jag har lagt en loop i en if-sats
+            for (int i = 0; i < Enemies.Count; i++)
+            {
+                Enemies[i].GetComponent<Canoneer>().Hurt(20);
+            }
             Objectives.Clear();
-
+            Objectives.Enqueue(Retreat);
             while (hp < 50)
             {
                 Heal(40);
             }
             shouldShoot = false;
-        }
-        */
 
-        
+        }
+
         Action nextAction = Objectives.Dequeue();
         try
         {
             print("3 second wait done");
-
-
             if (nextAction == Approach)
             {
 
@@ -117,21 +126,20 @@ public class Canoneer : Characters
                 shouldRetreat = true;
             }
         }
-        catch
+       catch
         {
-            
+
             throw new System.Exception("Something went wrong");
         }
-       
+        
 
-       
+
         leaveState = true;
         yield break;
 
 
 
     }
-
 
     //Denna metod ska få fienden att röra sig mot spelaren (Det funkar egentligen med vilka mål som helst så kan återanvända den)
     protected override void Approach(GameObject target)
@@ -158,7 +166,7 @@ public class Canoneer : Characters
         this.transform.position = Vector3.Lerp(transform.position, objectPosition.transform.position, 5f * Time.deltaTime);
 
     }
-    //Denna metod ska användas 
+    //Denna metod ska användas för att flytta fienden till en punkt. Det kan antingen vara spelaren eller reträttpunkten
     private void Moving(Vector3 Position)
     {
 
@@ -169,8 +177,17 @@ public class Canoneer : Characters
     public override void Hurt(int damage)
     {
         hp = hp - damage;
+        //Ska byta färg på objektet 
+        if (hp < 80)
+        {
+            this.GetComponent<Renderer>().material.color = Color.red;
+        }
+        else if (hp < 70)
+        {
+            this.GetComponent<Renderer>().material.color = Color.yellow;
+
+        }
         //När fienden tar skada kommer den omedelbart försöka fly
-        Objectives.Enqueue(Retreat);
     }
     private void Heal(int amount)
     {

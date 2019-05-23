@@ -39,7 +39,6 @@ public class PlayerController : Characters
     // Start is called before the first frame update
     void Start()
     {
-        //Använder denna kallelse för testsyfte
         sliderValue = 0f;
 
 
@@ -52,6 +51,18 @@ public class PlayerController : Characters
         //Denna if-sats skjuter iväg spelaren ifall musen trycks ned
         if (Input.GetMouseButtonDown(0) && ammo > 0)
         {
+            RaycastHit hit;
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out hit))
+            {
+
+                if (hit.transform.tag == "Enemy")
+                {
+                    print("You got it!");
+
+                    hit.transform.gameObject.GetComponent<Canoneer>().Hurt(20);
+                }
+            }
             testgun.Shooting();
             //Ändrar ammo-räknaren
             ammo--;
@@ -94,6 +105,7 @@ public class PlayerController : Characters
         hp = hp - damage;
         if (hp <= 80)
         {
+
             hpImage.sprite = heartStage2;
         }
         else if (hp <= 30)
@@ -144,9 +156,6 @@ public class PlayerController : Characters
             throw new System.Exception("That level doesn't exist");
         }
     }
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
 
-    }
 
 }
