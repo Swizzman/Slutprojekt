@@ -3,7 +3,13 @@ guid: 6646db272c13b4f4bbf8472717ea1d54
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - enemy: {instanceID: 0}
+  - testgun: {instanceID: 0}
+  - ammoSlider: {instanceID: 0}
+  - hpImage: {instanceID: 0}
+  - heartStage2: {fileID: 21300000, guid: 34e30dec8af735141b6ead0b96efcedd, type: 3}
+  - heartStage3: {fileID: 21300000, guid: 5dbea9405eb7b8747a51a37aeaf3a0f9, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
